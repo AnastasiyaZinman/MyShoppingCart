@@ -19,15 +19,10 @@ var ShoppingCart = function () {
   var updateCart = function () {
     console.log("updating");
     app.clearCart();
-    // var source = $('#cart-template').html();
-    // var template = Handlebars.compile(source);
-    // var newHTML = template(ShoppingCart);
-    // $('.cart-list').append(newHTML);
-    str="";
-    for(let i=0; i<cart.length; i++){
-      str = str +"<li>" + cart[i].name + "- $" + cart[i].price + "</li>";
-    }
-    $('.cart-list').append("<ul>" + str +  "</ul>");
+    var source = $('#cart-template').html();
+    var template = Handlebars.compile(source);
+    var newHTML = template(app);
+    $('.cart-list').append(newHTML);
     sumOfItems();
   }
 
@@ -36,8 +31,8 @@ var ShoppingCart = function () {
     // TODO: Write this function. Remember this function has nothing to do with display. 
     // It simply is for adding an item to the cart array, no HTML involved - honest ;-)
     var newCartItem = { 
-      'name': item,
-      'price': price         
+      name: item,
+      price: price         
     }
     cart.push(newCartItem);
     console.log(cart);
@@ -49,6 +44,7 @@ var ShoppingCart = function () {
   }
   
   return {
+    cart: cart,
     updateCart: updateCart,
     addItem: addItem,
     clearCart: clearCart,
