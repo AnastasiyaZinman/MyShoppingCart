@@ -4,13 +4,13 @@ var ShoppingCart = function () {
   var cart = [];
 
   var DeleteItemsFromCart = function () { 
-    cart = [];
-    console.log(cart);
+    app.cart = [];
+    console.log(app.cart);
   }
   var sumOfItems = function(){
     var sum = 0;
-    for(let i=0; i<cart.length; i++){
-      sum +=cart[i]["price"];
+    for(let i=0; i<app.cart.length; i++){
+      sum += app.cart[i]["price"];
     }
     $('.total').text(sum);
     console.log("sum",sum);
@@ -22,10 +22,15 @@ var ShoppingCart = function () {
     var source = $('#cart-template').html();
     var template = Handlebars.compile(source);
     var newHTML = template(app);
-    $('.cart-list').append(newHTML);
+    $('.items-list').append(newHTML);
+    bindEvents();
     sumOfItems();
   }
-
+  var removeItemFromCart = function (current) {
+    let itemIndex = $(current).closest("ul").index();
+    app.cart.splice(itemIndex, 1);
+    app.updateCart();
+  }
 
   var addItem = function (item, price) {
     // TODO: Write this function. Remember this function has nothing to do with display. 
@@ -34,13 +39,14 @@ var ShoppingCart = function () {
       name: item,
       price: price         
     }
-    cart.push(newCartItem);
-    console.log(cart);
+    app.cart.push(newCartItem);
+    console.log(app.cart);
   }
 
   var clearCart = function () {
     // TODO: Write a function that clears the cart ;-)
-    $('.cart-list').empty();
+    console.log("empty");
+    $('.items-list').empty();
   }
   
   return {
@@ -48,7 +54,8 @@ var ShoppingCart = function () {
     updateCart: updateCart,
     addItem: addItem,
     clearCart: clearCart,
-    DeleteItemsFromCart: DeleteItemsFromCart
+    DeleteItemsFromCart: DeleteItemsFromCart,
+    removeItemFromCart: removeItemFromCart
   }
 };
 
@@ -78,3 +85,12 @@ $('.clear-cart').on('click', function () {
   app.DeleteItemsFromCart();
   app.updateCart();
 });
+
+function bindEvents() {
+  console.log("bind");
+  $('.items-list').off();
+  $('.items-list').on('click', '.clicked', function () {
+  console.log("delete");
+  app.removeItemFromCart(this);
+});
+}
